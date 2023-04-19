@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">CommanderClient</string>
+
+    <string name="loading_screen_title">Loading servers</string>
+    <string name="servers_screen_title">Servers available</string>
+    <string name="commands_screen_title">Commands available</string>
+    <string name="shutdown_screen_title">Shutdown</string>
+
+    <string name="back_button">Back</string>
+</resources>
