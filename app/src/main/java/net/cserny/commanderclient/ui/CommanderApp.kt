@@ -76,14 +76,13 @@ fun CommanderApp(
             modifier = modifier.padding(innerPadding)
         ) {
             composable(route = CommanderScreen.Loading.name) {
-                LoadingScreen(
-//                    status = uiState.status,
-//                    quantityOptions = quantityOptions,
-//                    onNextButtonClicked = {
-//                        viewModel.setQuantity(it)
-//                        navController.navigate(CupcakeScreen.Flavor.name)
-//                    }
-                )
+                // TODO: callback doesnt work, needs to be called from main thread...
+                viewModel.loadServers { navController.navigate(CommanderScreen.Servers.name) }
+                LoadingScreen()
+            }
+
+            composable(route = CommanderScreen.Servers.name) {
+                ServersScreen()
             }
         }
     }
