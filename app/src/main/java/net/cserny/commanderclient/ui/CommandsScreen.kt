@@ -12,14 +12,16 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.PreviewActivity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import net.cserny.commanderclient.data.ServerAction
 import net.cserny.commanderclient.data.ServerDto
 import java.util.*
 
 @Composable
-fun CommandsScreen(serverDto: ServerDto) {
+fun CommandsScreen(serverDto: ServerDto, navController: NavHostController) {
     LazyColumn(horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -29,9 +31,7 @@ fun CommandsScreen(serverDto: ServerDto) {
             Button(
                 modifier = Modifier.width(250.dp),
                 onClick = {
-                    // TODO
-//                    viewModel.setCurrentServer(server)
-//                    navController.navigate(CommanderScreen.Commands.name)
+                    navController.navigate(CommanderScreen.convert(action).name)
                 }
             ) {
                 Text(action.name)
@@ -50,6 +50,7 @@ fun CommandsScreenPreview() {
             actionsAvailable = listOf(ServerAction.SHUTDOWN),
             actionsPending = Collections.emptyList(),
             lastPingDate = Date().time
-        )
+        ),
+        NavHostController(PreviewActivity())
     )
 }

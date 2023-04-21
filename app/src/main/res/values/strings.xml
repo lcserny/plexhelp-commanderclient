@@ -5,5 +5,9 @@
     <string name="commands_screen_title">Commands available</string>
     <string name="shutdown_screen_title">Shutdown</string>
 
+    <string name="execute">Execute</string>
+
+    <string name="shutdown_executed">Shutdown request sent!</string>
+
     <string name="back_button">Back</string>
 </resources>

@@ -17,11 +17,21 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import net.cserny.commanderclient.R
+import net.cserny.commanderclient.data.ServerAction
+import net.cserny.commanderclient.ui.commands.ShutdownScreen
 
 enum class CommanderScreen(@StringRes val title: Int) {
     Servers(title = R.string.servers_screen_title),
     Commands(title = R.string.commands_screen_title),
-    Shutdown(title = R.string.shutdown_screen_title)
+    Shutdown(title = R.string.shutdown_screen_title);
+
+    companion object {
+        fun convert(action: ServerAction) : CommanderScreen {
+            return when (action) {
+                ServerAction.SHUTDOWN -> Shutdown
+            }
+        }
+    }
 }
 
 @Composable
@@ -69,7 +79,6 @@ fun CommanderApp(
     ) { innerPadding ->
         val uiState by viewModel.uiState.collectAsState()
 
-        // TODO: use back button on servers and commands and shutdown
         NavHost(
             navController = navController,
             startDestination = CommanderScreen.Servers.name,
@@ -81,7 +90,11 @@ fun CommanderApp(
             }
 
             composable(route = CommanderScreen.Commands.name) {
-                CommandsScreen(uiState.currentServer!!)
+                CommandsScreen(uiState.currentServer!!, navController)
+            }
+
+            composable(route = CommanderScreen.Shutdown.name) {
+                ShutdownScreen(viewModel)
             }
         }
     }
