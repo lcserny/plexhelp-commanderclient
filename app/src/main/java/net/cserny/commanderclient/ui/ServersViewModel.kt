@@ -1,12 +1,12 @@
 package net.cserny.commanderclient.ui
 
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import net.cserny.commanderclient.data.Server
+import net.cserny.commanderclient.data.ServerAction
+import net.cserny.commanderclient.data.ServerDto
 import net.cserny.commanderclient.data.ServerStatus
 import net.cserny.commanderclient.data.ServersState
 import java.util.Collections
@@ -18,24 +18,31 @@ class ServersViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(ServersState())
     val uiState: StateFlow<ServersState> = _uiState.asStateFlow()
 
-    fun loadServers(callback: () -> Unit) {
+    fun loadServers() {
         thread {
+            // TODO: mongo
             Thread.sleep(5000L)
             _uiState.update { current ->
                 current.copy(
                     status = ServerStatus.LOADED,
-                    servers = listOf(
-                        Server(
-                            id = "123",
+                    serverDtos = listOf(
+                        ServerDto(
                             serverName = "winlegion",
-                            actionsAvailable = listOf("shutdown"),
+                            actionsAvailable = listOf(ServerAction.SHUTDOWN),
                             actionsPending = Collections.emptyList(),
                             lastPingDate = Date().time
                         )
                     )
                 )
             }
-            callback()
+        }
+    }
+
+    fun setCurrentServer(serverDto: ServerDto) {
+        _uiState.update { current ->
+            current.copy(
+                currentServer = serverDto
+            )
         }
     }
 }

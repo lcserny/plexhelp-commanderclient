@@ -19,7 +19,6 @@ import androidx.navigation.compose.rememberNavController
 import net.cserny.commanderclient.R
 
 enum class CommanderScreen(@StringRes val title: Int) {
-    Loading(title = R.string.loading_screen_title),
     Servers(title = R.string.servers_screen_title),
     Commands(title = R.string.commands_screen_title),
     Shutdown(title = R.string.shutdown_screen_title)
@@ -56,7 +55,7 @@ fun CommanderApp(
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = CommanderScreen.valueOf(
-        backStackEntry?.destination?.route ?: CommanderScreen.Loading.name
+        backStackEntry?.destination?.route ?: CommanderScreen.Servers.name
     )
 
     Scaffold(
@@ -70,19 +69,19 @@ fun CommanderApp(
     ) { innerPadding ->
         val uiState by viewModel.uiState.collectAsState()
 
+        // TODO: use back button on servers and commands and shutdown
         NavHost(
             navController = navController,
-            startDestination = CommanderScreen.Loading.name,
+            startDestination = CommanderScreen.Servers.name,
             modifier = modifier.padding(innerPadding)
         ) {
-            composable(route = CommanderScreen.Loading.name) {
-                // TODO: callback doesnt work, needs to be called from main thread...
-                viewModel.loadServers { navController.navigate(CommanderScreen.Servers.name) }
-                LoadingScreen()
+            composable(route = CommanderScreen.Servers.name) {
+                viewModel.loadServers()
+                ServersScreen(uiState.status, uiState.serverDtos, viewModel, navController)
             }
 
-            composable(route = CommanderScreen.Servers.name) {
-                ServersScreen()
+            composable(route = CommanderScreen.Commands.name) {
+                CommandsScreen(uiState.currentServer!!)
             }
         }
     }
