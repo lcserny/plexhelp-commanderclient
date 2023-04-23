@@ -25,4 +25,12 @@ class MongoDbService {
             )
         }
     }
+
+    fun sendShutdown(): Flow<Unit> {
+        return flow {
+            // TODO: execute shutdown http request
+            delay(5000L)
+            emit(Unit)
+        }
+    }
 }

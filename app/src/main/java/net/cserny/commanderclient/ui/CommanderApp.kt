@@ -94,7 +94,7 @@ fun CommanderApp(
             }
 
             composable(route = CommanderScreen.Shutdown.name) {
-                ShutdownScreen(viewModel)
+                ShutdownScreen(viewModel, navController, uiState.actionExecuted)
             }
         }
     }

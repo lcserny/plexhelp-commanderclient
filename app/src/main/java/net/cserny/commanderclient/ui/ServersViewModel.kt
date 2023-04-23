@@ -9,7 +9,6 @@ import net.cserny.commanderclient.data.ServerDto
 import net.cserny.commanderclient.data.ServerStatus
 import net.cserny.commanderclient.data.ServersState
 import net.cserny.commanderclient.service.MongoDbService
-import net.cserny.commanderclient.service.ShutdownService
 import java.util.Collections
 import java.util.Date
 import kotlin.concurrent.thread
@@ -17,10 +16,13 @@ import kotlin.concurrent.thread
 class ServersViewModel : ViewModel() {
 
     private val _uiState = MutableStateFlow(ServersState())
-    private val shutdownService: ShutdownService = ShutdownService()
     private val mongoDbService: MongoDbService = MongoDbService()
 
     val uiState: StateFlow<ServersState> = _uiState.asStateFlow()
+
+    fun resetState() {
+        _uiState.value = ServersState()
+    }
 
     fun loadServers() {
         viewModelScope.launch {
@@ -45,7 +47,13 @@ class ServersViewModel : ViewModel() {
 
     fun executeShutdown() {
         viewModelScope.launch {
-            shutdownService.shutdown().single()
+            mongoDbService.sendShutdown().collect { _ ->
+                _uiState.update { current ->
+                    current.copy(
+                        actionExecuted = true
+                    )
+                }
+            }
         }
     }
 }
