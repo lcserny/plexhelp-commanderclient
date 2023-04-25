@@ -4,10 +4,7 @@ import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +15,7 @@ import androidx.navigation.NavHostController
 import net.cserny.commanderclient.data.ServerAction
 import net.cserny.commanderclient.data.ServerDto
 import net.cserny.commanderclient.data.ServerStatus
+import net.cserny.commanderclient.ui.components.BoxedButton
 import java.util.*
 
 @Composable
@@ -41,16 +39,10 @@ fun Servers(serverDtos: List<ServerDto>, viewModel: ServersViewModel, navControl
             .then(Modifier.fillMaxWidth())
             .then(Modifier.padding(20.dp))) {
         items(serverDtos) { server ->
-            Button(
-                modifier = Modifier.width(250.dp),
-                onClick = {
-                    viewModel.setCurrentServer(server)
-                    navController.navigate(CommanderScreen.Commands.name)
-                }
-            ) {
-                Text(server.serverName)
+            BoxedButton(server.serverName) {
+                viewModel.setCurrentServer(server)
+                navController.navigate(CommanderScreen.Commands.name)
             }
-            Divider(thickness = 1.dp)
         }
     }
 }
@@ -75,9 +67,10 @@ fun ServersScreenPreview() {
     ServersScreen(
         ServerStatus.LOADED, listOf(
             ServerDto(
+                id = "1",
                 serverName = "winlegion",
                 actionsAvailable = listOf(ServerAction.SHUTDOWN),
-                actionsPending = Collections.emptyList(),
+                actionsPending = mutableListOf(),
                 lastPingDate = Date().time
             )
         ),

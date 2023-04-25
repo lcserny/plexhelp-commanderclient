@@ -90,11 +90,11 @@ fun CommanderApp(
             }
 
             composable(route = CommanderScreen.Commands.name) {
-                CommandsScreen(uiState.currentServer!!, navController)
+                CommandsScreen(uiState.currentServer, navController)
             }
 
             composable(route = CommanderScreen.Shutdown.name) {
-                ShutdownScreen(viewModel, navController, uiState.actionExecuted)
+                ShutdownScreen(uiState.currentServer, viewModel, navController, uiState.actionExecuted)
             }
         }
     }

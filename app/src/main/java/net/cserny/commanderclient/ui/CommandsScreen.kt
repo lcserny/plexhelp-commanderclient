@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import net.cserny.commanderclient.data.ServerAction
 import net.cserny.commanderclient.data.ServerDto
+import net.cserny.commanderclient.ui.components.BoxedButton
 import java.util.*
 
 @Composable
@@ -28,15 +29,9 @@ fun CommandsScreen(serverDto: ServerDto, navController: NavHostController) {
             .then(Modifier.fillMaxWidth())
             .then(Modifier.padding(20.dp))) {
         items(serverDto.actionsAvailable) { action ->
-            Button(
-                modifier = Modifier.width(250.dp),
-                onClick = {
-                    navController.navigate(CommanderScreen.convert(action).name)
-                }
-            ) {
-                Text(action.name)
+            BoxedButton(action.name) {
+                navController.navigate(CommanderScreen.convert(action).name)
             }
-            Divider(thickness = 1.dp)
         }
     }
 }
@@ -46,6 +41,7 @@ fun CommandsScreen(serverDto: ServerDto, navController: NavHostController) {
 fun CommandsScreenPreview() {
     CommandsScreen(
         ServerDto(
+            id = "1",
             serverName = "winlegion",
             actionsAvailable = listOf(ServerAction.SHUTDOWN),
             actionsPending = Collections.emptyList(),

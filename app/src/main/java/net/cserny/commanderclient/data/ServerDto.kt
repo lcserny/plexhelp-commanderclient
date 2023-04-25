@@ -10,8 +10,11 @@ enum class ServerAction {
 }
 
 data class ServerDto(
+    val id: String,
     val serverName: String,
     val actionsAvailable: List<ServerAction>,
-    val actionsPending: List<ServerAction>,
+    var actionsPending: MutableList<ServerAction>,
     val lastPingDate: Long,
 )
+
+val emptyServerDto = ServerDto( "", "", listOf(), mutableListOf(), 0L )

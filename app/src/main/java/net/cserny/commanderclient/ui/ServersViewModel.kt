@@ -2,6 +2,7 @@ package net.cserny.commanderclient.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.github.cdimascio.dotenv.dotenv
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,10 @@ import kotlin.concurrent.thread
 class ServersViewModel : ViewModel() {
 
     private val _uiState = MutableStateFlow(ServersState())
-    private val mongoDbService: MongoDbService = MongoDbService()
+    private val mongoDbService: MongoDbService = MongoDbService(dotenv = dotenv {
+        directory = "/assets"
+        filename = "env"
+    })
 
     val uiState: StateFlow<ServersState> = _uiState.asStateFlow()
 
@@ -45,9 +49,9 @@ class ServersViewModel : ViewModel() {
         }
     }
 
-    fun executeShutdown() {
+    fun executeShutdown(serverDto: ServerDto) {
         CoroutineScope(context = Dispatchers.IO).launch {
-            mongoDbService.sendShutdown().collect { _ ->
+            mongoDbService.sendShutdown(serverDto).collect { _ ->
                 _uiState.update { current ->
                     current.copy(
                         actionExecuted = true

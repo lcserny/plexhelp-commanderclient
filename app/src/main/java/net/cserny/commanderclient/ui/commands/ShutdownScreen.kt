@@ -14,11 +14,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import net.cserny.commanderclient.R
+import net.cserny.commanderclient.data.ServerDto
+import net.cserny.commanderclient.data.emptyServerDto
 import net.cserny.commanderclient.ui.CommanderScreen
 import net.cserny.commanderclient.ui.ServersViewModel
+import net.cserny.commanderclient.ui.components.BoxedButton
 
 @Composable
-fun ShutdownScreen(viewModel: ServersViewModel, navController: NavHostController, actionExecuted: Boolean) {
+fun ShutdownScreen(
+    serverDto: ServerDto,
+    viewModel: ServersViewModel,
+    navController: NavHostController,
+    actionExecuted: Boolean
+) {
     if (actionExecuted) {
         val text = stringResource(R.string.shutdown_executed)
         Toast.makeText(LocalContext.current, text, Toast.LENGTH_LONG).show()
@@ -33,13 +41,8 @@ fun ShutdownScreen(viewModel: ServersViewModel, navController: NavHostController
             .then(Modifier.fillMaxWidth())
             .then(Modifier.padding(20.dp))
     ) {
-        Button(
-            modifier = Modifier.width(250.dp),
-            onClick = {
-                viewModel.executeShutdown()
-            }
-        ) {
-            Text(stringResource(R.string.execute))
+        BoxedButton(stringResource(R.string.execute)) {
+            viewModel.executeShutdown(serverDto)
         }
     }
 }
@@ -47,7 +50,10 @@ fun ShutdownScreen(viewModel: ServersViewModel, navController: NavHostController
 @Preview
 @Composable
 fun ShutdownScreenPreview() {
-    ShutdownScreen(ServersViewModel(),
+    ShutdownScreen(
+        emptyServerDto,
+        ServersViewModel(),
         NavHostController(PreviewActivity()),
-        false)
+        false
+    )
 }
