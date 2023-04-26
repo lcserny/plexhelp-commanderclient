@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,6 +40,7 @@ fun CommanderTopBar(
     currentScreen: CommanderScreen,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
+    refresh: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
@@ -49,6 +51,13 @@ fun CommanderTopBar(
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.back_button)
+                    )
+                }
+            } else {
+                IconButton(onClick = refresh) {
+                    Icon(
+                        imageVector = Icons.Filled.Refresh,
                         contentDescription = stringResource(R.string.back_button)
                     )
                 }
@@ -73,6 +82,9 @@ fun CommanderApp(
             CommanderTopBar(
                 currentScreen = currentScreen,
                 canNavigateBack = navController.previousBackStackEntry != null,
+                refresh = {
+                    viewModel.resetState()
+                },
                 navigateUp = { navController.navigateUp() }
             )
         }
@@ -94,7 +106,7 @@ fun CommanderApp(
             }
 
             composable(route = CommanderScreen.Shutdown.name) {
-                ShutdownScreen(uiState.currentServer, viewModel, navController, uiState.actionExecuted)
+                ShutdownScreen(uiState.currentServer, viewModel, uiState.actionExecuted)
             }
         }
     }

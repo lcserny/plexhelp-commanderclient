@@ -24,14 +24,11 @@ import net.cserny.commanderclient.ui.components.BoxedButton
 fun ShutdownScreen(
     serverDto: ServerDto,
     viewModel: ServersViewModel,
-    navController: NavHostController,
     actionExecuted: Boolean
 ) {
     if (actionExecuted) {
         val text = stringResource(R.string.shutdown_executed)
         Toast.makeText(LocalContext.current, text, Toast.LENGTH_LONG).show()
-        viewModel.resetState()
-        navController.navigate(CommanderScreen.Servers.name)
     }
 
     Column(
@@ -53,7 +50,6 @@ fun ShutdownScreenPreview() {
     ShutdownScreen(
         emptyServerDto,
         ServersViewModel(),
-        NavHostController(PreviewActivity()),
         false
     )
 }
